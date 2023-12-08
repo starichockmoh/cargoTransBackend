@@ -1,29 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { IClient } from 'src/interfaces/client.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ClientsDto } from 'src/dto';
+import { ClientsEntity } from 'src/model/clients.entity';
 
 @Injectable()
 export class ClientsService {
-  private readonly clients: Array<IClient> = [];
-
-  create(cat: IClient) {
-    this.clients.push(cat);
+  constructor(
+    @InjectRepository(ClientsEntity)
+    private readonly clientsEntityRepository: Repository<ClientsEntity>,
+  ) {}
+  async create(dto: ClientsDto) {
+    const e = await this.clientsEntityRepository.save(dto.toEntity());
+    return ClientsDto.fromEntity(e);
   }
 
-  findAll(): Array<IClient> {
-    return this.clients;
+  async findAll() {
+    return await this.clientsEntityRepository
+      .find()
+      .then((items) => items.map((e) => ClientsDto.fromEntity(e)));
   }
 
-  findOne(id: number): IClient {
-    return this.clients[id];
+  async findOne(id: number) {
+    return await this.clientsEntityRepository
+      .findOne(id)
+      .then((item) => (item ? ClientsDto.fromEntity(item) : null));
   }
 
-  update(id: number, cat: IClient): IClient {
-    this.clients[id] = cat;
-    return this.clients[id];
+  async update(id: number, dto: ClientsDto) {
+    await this.clientsEntityRepository.update(id, dto.toEntity());
+    return await this.clientsEntityRepository
+      .findOne(id)
+      .then((item) => (item ? ClientsDto.fromEntity(item) : null));
   }
 
-  remove(id: number): Array<IClient> {
-    this.clients.splice(id);
-    return this.clients;
+  async remove(id: number) {
+    return await this.clientsEntityRepository.delete(id);
   }
 }

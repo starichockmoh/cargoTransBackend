@@ -1,7 +1,7 @@
 import { CatsDto } from './cats.dto';
 import { PostCargoTypeDto } from './cargo_types.dto';
 import { PostCargoDto } from './cargoes.dto';
-import { PostClientDto } from './clients.dto';
+import { ClientsDto } from './clients.dto';
 import { VehicleGroupsDto } from './vehicle_groups.dto';
 import { PostPickupPointDto } from './pickup_points.dto';
 import { PostRequestDto } from './requests.dto';
@@ -13,7 +13,7 @@ export {
   PostCargoDto,
   PostCargoTypeDto,
   PostRequestDto,
-  PostClientDto,
+  ClientsDto,
   CatsDto,
   VehiclesDto,
   VehicleGroupsDto,
