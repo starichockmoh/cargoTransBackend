@@ -1,21 +1,23 @@
 import { CatsDto } from './cats.dto';
-import { PostCargoTypeDto } from './cargo_types.dto';
-import { PostCargoDto } from './cargoes.dto';
+import { CargoTypesDto } from './cargo_types.dto';
+import { CargoesDto } from './cargoes.dto';
 import { ClientsDto } from './clients.dto';
 import { VehicleGroupsDto } from './vehicle_groups.dto';
-import { PostPickupPointDto } from './pickup_points.dto';
-import { PostRequestDto } from './requests.dto';
+import { PickUpPointsDto } from 'src/dto/pick_up_points.dto';
+import { RequestsDto } from './requests.dto';
 import { DriversDto } from './drivers.dto';
 import { VehiclesDto } from './vehicles.dto';
+import { RequestStatusesDto } from './request_statuses.dto';
 
 export {
   DriversDto,
-  PostCargoDto,
-  PostCargoTypeDto,
-  PostRequestDto,
+  CargoesDto,
+  CargoTypesDto,
+  RequestsDto,
   ClientsDto,
   CatsDto,
   VehiclesDto,
   VehicleGroupsDto,
-  PostPickupPointDto,
+  PickUpPointsDto,
+  RequestStatusesDto,
 };

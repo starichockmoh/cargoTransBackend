@@ -1,29 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { ICargoType } from 'src/interfaces/cargo_type.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CargoTypesEntity } from 'src/model/cargo_types.entity';
+import { Repository } from 'typeorm';
+import { CargoTypesDto } from 'src/dto';
 
 @Injectable()
 export class CargoTypesService {
-  private readonly cargo_types: Array<ICargoType> = [];
-
-  create(cat: ICargoType) {
-    this.cargo_types.push(cat);
+  constructor(
+    @InjectRepository(CargoTypesEntity)
+    private readonly cargoTypesEntityRepository: Repository<CargoTypesEntity>,
+  ) {}
+  async create(dto: CargoTypesDto) {
+    const e = await this.cargoTypesEntityRepository.save(dto.toEntity());
+    return CargoTypesDto.fromEntity(e);
   }
 
-  findAll(): Array<ICargoType> {
-    return this.cargo_types;
+  async findAll() {
+    return await this.cargoTypesEntityRepository
+      .find()
+      .then((items) => items.map((e) => CargoTypesDto.fromEntity(e)));
   }
 
-  findOne(id: number): ICargoType {
-    return this.cargo_types[id];
+  async findOne(id: number) {
+    return await this.cargoTypesEntityRepository
+      .findOne(id)
+      .then((item) => (item ? CargoTypesDto.fromEntity(item) : null));
   }
 
-  update(id: number, cat: ICargoType): ICargoType {
-    this.cargo_types[id] = cat;
-    return this.cargo_types[id];
+  async update(id: number, dto: CargoTypesDto) {
+    await this.cargoTypesEntityRepository.update(id, dto.toEntity());
+    return await this.cargoTypesEntityRepository
+      .findOne(id)
+      .then((item) => (item ? CargoTypesDto.fromEntity(item) : null));
   }
 
-  remove(id: number): Array<ICargoType> {
-    this.cargo_types.splice(id);
-    return this.cargo_types;
+  async remove(id: number) {
+    return await this.cargoTypesEntityRepository.delete(id);
   }
 }

@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { CargoTypesEntity } from 'src/model/cargo_types.entity';
+import { RequestStatusesEntity } from 'src/model/request_statuses.entity';
 
-export class CargoTypesDto implements Readonly<CargoTypesDto> {
+export class RequestStatusesDto implements Readonly<RequestStatusesDto> {
   @ApiProperty({ required: true })
   id: number;
 
@@ -10,14 +10,14 @@ export class CargoTypesDto implements Readonly<CargoTypesDto> {
   @IsString()
   name: string;
 
-  public static from(dto: Partial<CargoTypesDto>) {
-    const it = new CargoTypesDto();
+  public static from(dto: Partial<RequestStatusesDto>) {
+    const it = new RequestStatusesDto();
     it.id = dto.id ?? 0;
     it.name = dto.name ?? '';
     return it;
   }
 
-  public static fromEntity(entity: CargoTypesEntity) {
+  public static fromEntity(entity: RequestStatusesEntity) {
     return this.from({
       id: entity.id,
       name: entity.name,
@@ -25,7 +25,7 @@ export class CargoTypesDto implements Readonly<CargoTypesDto> {
   }
 
   public toEntity() {
-    const it = new CargoTypesEntity();
+    const it = new RequestStatusesEntity();
     it.id = this.id;
     it.name = this.name;
     return it;

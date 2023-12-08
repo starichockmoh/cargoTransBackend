@@ -3,40 +3,46 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
-  Query,
+  ValidationPipe,
 } from '@nestjs/common';
-import type { PostCargoTypeDto } from 'src/dto';
+import { CargoTypesDto } from 'src/dto';
 import { CargoTypesService } from 'src/services';
 
 @Controller('cargo_types')
 export class CargoTypesController {
   constructor(private cargoTypesService: CargoTypesService) {}
   @Post()
-  async create(@Body() postDto: PostCargoTypeDto) {
-    return this.cargoTypesService.create(postDto);
+  async post(
+    @Body(new ValidationPipe({ transform: true })) dto: CargoTypesDto,
+  ) {
+    return this.cargoTypesService.create(dto);
   }
 
   @Get()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async findAll(@Query() query: { limit: string }) {
-    return this.cargoTypesService.findAll();
+  async getAll() {
+    return await this.cargoTypesService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.cargoTypesService.findOne(Number(id));
+  async getOne(@Param('id') id: string) {
+    return await this.cargoTypesService.findOne(Number(id));
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateDto: PostCargoTypeDto) {
-    return this.cargoTypesService.update(Number(id), updateDto);
+  async update(
+    @Param('id') id: string,
+    @Body(new ValidationPipe({ transform: true })) dto: CargoTypesDto,
+  ) {
+    return this.cargoTypesService.update(Number(id), dto);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async remove(@Param('id') id: string) {
-    return this.cargoTypesService.remove(Number(id));
+    await this.cargoTypesService.remove(Number(id));
   }
 }

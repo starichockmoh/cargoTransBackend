@@ -1,29 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { IRequest } from 'src/interfaces/request.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { RequestsEntity } from 'src/model/requests.entity';
+import { Repository } from 'typeorm';
+import { RequestsDto } from 'src/dto';
 
 @Injectable()
 export class RequestsService {
-  private readonly requests: Array<IRequest> = [];
-
-  create(cat: IRequest) {
-    this.requests.push(cat);
+  constructor(
+    @InjectRepository(RequestsEntity)
+    private readonly requestsEntityRepository: Repository<RequestsEntity>,
+  ) {}
+  async create(dto: RequestsDto) {
+    const e = await this.requestsEntityRepository.save(dto.toEntity());
+    return RequestsDto.fromEntity(e);
   }
 
-  findAll(): Array<IRequest> {
-    return this.requests;
+  async findAll() {
+    return await this.requestsEntityRepository
+      .find()
+      .then((items) => items.map((e) => RequestsDto.fromEntity(e)));
   }
 
-  findOne(id: number): IRequest {
-    return this.requests[id];
+  async findOne(id: number) {
+    return await this.requestsEntityRepository
+      .findOne(id)
+      .then((item) => (item ? RequestsDto.fromEntity(item) : null));
   }
 
-  update(id: number, cat: IRequest): IRequest {
-    this.requests[id] = cat;
-    return this.requests[id];
+  async update(id: number, dto: RequestsDto) {
+    await this.requestsEntityRepository.update(id, dto.toEntity());
+    return await this.requestsEntityRepository
+      .findOne(id)
+      .then((item) => (item ? RequestsDto.fromEntity(item) : null));
   }
 
-  remove(id: number): Array<IRequest> {
-    this.requests.splice(id);
-    return this.requests;
+  async remove(id: number) {
+    return await this.requestsEntityRepository.delete(id);
   }
 }

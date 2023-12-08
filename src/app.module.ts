@@ -8,7 +8,8 @@ import {
   CargoTypesModule,
   RequestsModule,
   DriversModule,
-  PickupPointsModule,
+  PickUpPointsModule,
+  RequestStatusesModule,
 } from 'src/modules';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from 'src/config/config.service';
@@ -24,7 +25,8 @@ import { configService } from 'src/config/config.service';
     CargoTypesModule,
     RequestsModule,
     DriversModule,
-    PickupPointsModule,
+    PickUpPointsModule,
+    RequestStatusesModule,
   ],
 })
 export class AppModule {}
