@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { CargoTypesEntity } from 'src/model/cargo_types.entity';
 
 // CREATE TABLE vehicle_groups
 // (
@@ -12,4 +19,8 @@ export class VehicleGroupsEntity {
 
   @Column({ type: 'varchar', length: 300, unique: true })
   group_name: string;
+
+  @ManyToMany(() => CargoTypesEntity)
+  @JoinTable()
+  cargo_types_entities: CargoTypesEntity[];
 }

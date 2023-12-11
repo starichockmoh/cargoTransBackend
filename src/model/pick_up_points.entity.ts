@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { RequestsEntity } from 'src/model/requests.entity';
 
 // CREATE TABLE pick_up_points
 // (
@@ -24,4 +31,8 @@ export class PickUpPointsEntity {
 
   @Column({ type: 'varchar', length: 300 })
   corps: string;
+
+  @ManyToMany(() => RequestsEntity)
+  @JoinTable()
+  requests: RequestsEntity[];
 }
