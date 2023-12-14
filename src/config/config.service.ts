@@ -42,7 +42,6 @@ class ConfigService {
 
       entities: ['dist/model/**/*{.js,.ts}'],
       migrations: ['dist/migration/**/*{.js,.ts}'],
-      //subscribers: ['dist/subscribers/**/*{.js,.ts}'],
       cli: {
         migrationsDir: 'src/migration',
       },

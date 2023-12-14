@@ -37,21 +37,21 @@ export class CargoesEntity {
     persistence: false,
   })
   @JoinColumn({ name: 'request_id' })
-  private _request: never;
+  request: RequestsEntity;
 
   @ManyToOne(() => ClientsEntity, undefined, {
     nullable: false,
     persistence: false,
   })
   @JoinColumn({ name: 'client_id' })
-  private _client: never;
+  client: ClientsEntity;
 
   @ManyToOne(() => CargoTypesEntity, undefined, {
     nullable: false,
     persistence: false,
   })
   @JoinColumn({ name: 'type_id' })
-  private _cargo_type: never;
+  cargo_type: CargoTypesEntity;
 
   @Column({ type: 'int', nullable: false })
   request_id: number;

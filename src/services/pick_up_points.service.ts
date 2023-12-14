@@ -15,7 +15,14 @@ export class PickUpPointsService {
     return PickUpPointsDto.fromEntity(e);
   }
 
-  async findAll() {
+  async findAll(search: string | undefined) {
+    if (search) {
+      return await this.pickUpPointsEntityRepository
+        .find({
+          where: [{ town: search }],
+        })
+        .then((items) => items.map((e) => PickUpPointsDto.fromEntity(e)));
+    }
     return await this.pickUpPointsEntityRepository
       .find()
       .then((items) => items.map((e) => PickUpPointsDto.fromEntity(e)));

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CargoesEntity } from 'src/model/cargoes.entity';
-import { Repository } from 'typeorm';
+import { createQueryBuilder, Repository } from 'typeorm';
 import { CargoesDto } from 'src/dto';
 
 @Injectable()
@@ -15,16 +15,27 @@ export class CargoesService {
     return CargoesDto.fromEntity(e);
   }
 
-  async findAll() {
+  async findAll(search: string | undefined) {
+    if (search) {
+      return await this.cargoesEntityRepository
+        .find({
+          where: [{ name: search }],
+        })
+        .then((items) => items.map((e) => CargoesDto.fromEntity(e)));
+    }
     return await this.cargoesEntityRepository
       .find()
       .then((items) => items.map((e) => CargoesDto.fromEntity(e)));
   }
 
   async findOne(id: number) {
-    return await this.cargoesEntityRepository
-      .findOne(id)
-      .then((item) => (item ? CargoesDto.fromEntity(item) : null));
+    const cargo = await createQueryBuilder(CargoesEntity, 'cargo')
+      .innerJoinAndSelect('cargo.client', 'clients')
+      .innerJoinAndSelect('cargo.request', 'requests')
+      .innerJoinAndSelect('cargo.cargo_type', 'cargo_types')
+      .where('cargo.id = :id', { id: id })
+      .getOne();
+    return cargo ? CargoesDto.fromEntity(cargo) : null;
   }
 
   async update(id: number, dto: CargoesDto) {

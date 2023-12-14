@@ -15,7 +15,14 @@ export class ClientsService {
     return ClientsDto.fromEntity(e);
   }
 
-  async findAll() {
+  async findAll(search: string | undefined) {
+    if (search) {
+      return await this.clientsEntityRepository
+        .find({
+          where: [{ last_name: search }],
+        })
+        .then((items) => items.map((e) => ClientsDto.fromEntity(e)));
+    }
     return await this.clientsEntityRepository
       .find()
       .then((items) => items.map((e) => ClientsDto.fromEntity(e)));

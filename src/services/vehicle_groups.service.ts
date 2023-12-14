@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VehicleGroupsEntity } from 'src/model/vehicle_groups.entity';
 import { Repository } from 'typeorm';
-import { VehicleGroupsDto } from 'src/dto';
+import { DriversDto, VehicleGroupsDto } from 'src/dto';
 
 @Injectable()
 export class VehicleGroupsService {
@@ -15,7 +15,14 @@ export class VehicleGroupsService {
     return VehicleGroupsDto.fromEntity(e);
   }
 
-  async findAll() {
+  async findAll(search: string | undefined) {
+    if (search) {
+      return await this.vehicleGroupsEntityRepository
+        .find({
+          where: [{ group_name: search }],
+        })
+        .then((items) => items.map((e) => VehicleGroupsDto.fromEntity(e)));
+    }
     return await this.vehicleGroupsEntityRepository
       .find()
       .then((items) => items.map((e) => VehicleGroupsDto.fromEntity(e)));

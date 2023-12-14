@@ -15,7 +15,14 @@ export class CargoTypesService {
     return CargoTypesDto.fromEntity(e);
   }
 
-  async findAll() {
+  async findAll(search: string | undefined) {
+    if (search) {
+      return await this.cargoTypesEntityRepository
+        .find({
+          where: [{ name: search }],
+        })
+        .then((items) => items.map((e) => CargoTypesDto.fromEntity(e)));
+    }
     return await this.cargoTypesEntityRepository
       .find()
       .then((items) => items.map((e) => CargoTypesDto.fromEntity(e)));

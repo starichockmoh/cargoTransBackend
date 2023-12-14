@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VehiclesEntity } from 'src/model/vehicles.entity';
-import { Repository } from 'typeorm';
-import { VehiclesDto } from 'src/dto';
+import { createQueryBuilder, Repository } from 'typeorm';
+import { VehicleGroupsDto, VehiclesDto } from 'src/dto';
 
 @Injectable()
 export class VehiclesService {
@@ -15,16 +15,25 @@ export class VehiclesService {
     return VehiclesDto.fromEntity(e);
   }
 
-  async findAll() {
+  async findAll(search: string | undefined) {
+    if (search) {
+      return await this.vehiclesEntityRepository
+        .find({
+          where: [{ car_number: search }],
+        })
+        .then((items) => items.map((e) => VehiclesDto.fromEntity(e)));
+    }
     return await this.vehiclesEntityRepository
       .find()
       .then((items) => items.map((e) => VehiclesDto.fromEntity(e)));
   }
 
   async findOne(id: number) {
-    return await this.vehiclesEntityRepository
-      .findOne(id)
-      .then((item) => (item ? VehiclesDto.fromEntity(item) : null));
+    const vehicle = await createQueryBuilder(VehiclesEntity, 'vehicle')
+      .innerJoinAndSelect('vehicle.group', 'vehicle_groups')
+      .where('vehicle.id = :id', { id: id })
+      .getOne();
+    return vehicle ? VehiclesDto.fromEntity(vehicle) : null;
   }
 
   async update(id: number, dto: VehiclesDto) {

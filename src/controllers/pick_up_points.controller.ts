@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { PickUpPointsDto } from 'src/dto';
@@ -23,8 +24,8 @@ export class PickUpPointsController {
   }
 
   @Get()
-  async getAll() {
-    return await this.pickupPointsService.findAll();
+  async getAll(@Query('search') search: string | undefined) {
+    return await this.pickupPointsService.findAll(search);
   }
 
   @Get(':id')

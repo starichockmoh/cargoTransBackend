@@ -45,21 +45,21 @@ export class RequestsEntity {
     persistence: false,
   })
   @JoinColumn({ name: 'driver_id' })
-  private _driver: never;
+  driver: DriversEntity;
 
   @ManyToOne(() => VehiclesEntity, undefined, {
     nullable: false,
     persistence: false,
   })
   @JoinColumn({ name: 'vehicle_id' })
-  private _vehicle: never;
+  vehicle: VehiclesEntity;
 
   @ManyToOne(() => RequestStatusesEntity, undefined, {
     nullable: false,
     persistence: false,
   })
   @JoinColumn({ name: 'status_id' })
-  private _request_status: never;
+  request_status: RequestStatusesEntity;
 
   @Column({ type: 'int', nullable: false })
   driver_id: number;

@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNumber, IsDateString } from 'class-validator';
 import { RequestsEntity } from 'src/model/requests.entity';
+import { DriversDto } from 'src/dto/drivers.dto';
+import { VehiclesDto } from 'src/dto/vehicles.dto';
+import { RequestStatusesDto } from 'src/dto/request_statuses.dto';
+import { VehicleGroupsDto } from 'src/dto/vehicle_groups.dto';
 
 export class RequestsDto implements Readonly<RequestsDto> {
   @ApiProperty({ required: true })
@@ -34,6 +38,15 @@ export class RequestsDto implements Readonly<RequestsDto> {
   @IsNumber()
   status_id: number;
 
+  @ApiProperty({ required: true })
+  driver: DriversDto | undefined;
+
+  @ApiProperty({ required: true })
+  vehicle: VehiclesDto | undefined;
+
+  @ApiProperty({ required: true })
+  request_status: RequestStatusesDto | undefined;
+
   public static from(dto: Partial<RequestsDto>) {
     const it = new RequestsDto();
     it.id = dto.id ?? 0;
@@ -44,6 +57,9 @@ export class RequestsDto implements Readonly<RequestsDto> {
     it.date_created = dto.date_created ?? '';
     it.description = dto.description ?? '';
     it.name = dto.name ?? '';
+    it.request_status = dto.request_status;
+    it.driver = dto.driver;
+    it.vehicle = dto.vehicle;
     return it;
   }
 
@@ -56,7 +72,14 @@ export class RequestsDto implements Readonly<RequestsDto> {
       status_id: entity.status_id,
       vehicle_id: entity.vehicle_id,
       date_created: entity.date_created,
-      cost: entity.cost,
+      cost: Number(entity.cost),
+      request_status: entity.request_status
+        ? RequestStatusesDto.fromEntity(entity.request_status)
+        : undefined,
+      driver: entity.driver ? DriversDto.fromEntity(entity.driver) : undefined,
+      vehicle: entity.vehicle
+        ? VehiclesDto.fromEntity(entity.vehicle)
+        : undefined,
     });
   }
 

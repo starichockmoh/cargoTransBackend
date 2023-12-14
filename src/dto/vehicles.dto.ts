@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNumber, IsDateString } from 'class-validator';
 import { VehiclesEntity } from 'src/model/vehicles.entity';
+import { VehicleGroupsDto } from 'src/dto/vehicle_groups.dto';
 
 export class VehiclesDto implements Readonly<VehiclesDto> {
   @ApiProperty({ required: true })
@@ -26,6 +27,9 @@ export class VehiclesDto implements Readonly<VehiclesDto> {
   @IsNumber()
   group_id: number;
 
+  @ApiProperty({ required: true })
+  group: VehicleGroupsDto | undefined;
+
   public static from(dto: Partial<VehiclesDto>) {
     const it = new VehiclesDto();
     it.id = dto.id ?? 0;
@@ -34,6 +38,7 @@ export class VehiclesDto implements Readonly<VehiclesDto> {
     it.date_of_manufacture = dto.date_of_manufacture ?? '';
     it.car_number = dto.car_number ?? '';
     it.lifting_capacity = dto.lifting_capacity ?? 0;
+    it.group = dto.group;
     return it;
   }
 
@@ -45,6 +50,9 @@ export class VehiclesDto implements Readonly<VehiclesDto> {
       date_of_manufacture: entity.date_of_manufacture,
       lifting_capacity: entity.lifting_capacity,
       group_id: entity.group_id,
+      group: entity.group
+        ? VehicleGroupsDto.fromEntity(entity.group)
+        : undefined,
     });
   }
 

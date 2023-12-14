@@ -15,7 +15,14 @@ export class DriversService {
     return DriversDto.fromEntity(e);
   }
 
-  async findAll() {
+  async findAll(search: string | undefined) {
+    if (search) {
+      return await this.driversEntityRepository
+        .find({
+          where: [{ last_name: search }],
+        })
+        .then((items) => items.map((e) => DriversDto.fromEntity(e)));
+    }
     return await this.driversEntityRepository
       .find()
       .then((items) => items.map((e) => DriversDto.fromEntity(e)));

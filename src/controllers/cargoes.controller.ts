@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { CargoesDto } from 'src/dto';
@@ -21,8 +22,8 @@ export class CargoesController {
   }
 
   @Get()
-  async getAll() {
-    return await this.cargoesService.findAll();
+  async getAll(@Query('search') search: string | undefined) {
+    return await this.cargoesService.findAll(search);
   }
 
   @Get(':id')

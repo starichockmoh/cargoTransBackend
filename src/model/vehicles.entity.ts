@@ -39,7 +39,7 @@ export class VehiclesEntity {
     persistence: false,
   })
   @JoinColumn({ name: 'group_id' })
-  private _group: never;
+  group: VehicleGroupsEntity;
 
   @Column({ type: 'int' })
   group_id: number;

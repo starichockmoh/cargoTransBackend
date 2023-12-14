@@ -7,12 +7,11 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { VehicleGroupsDto } from 'src/dto';
 import { VehicleGroupsService } from 'src/services';
-import { Request } from 'express';
 
 @Controller('vehicle_groups')
 export class VehicleGroupsController {
@@ -25,9 +24,8 @@ export class VehicleGroupsController {
   }
 
   @Get()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getAll(@Req() request: Request) {
-    return await this.vehicleGroupsService.findAll();
+  async getAll(@Query('search') search: string | undefined) {
+    return await this.vehicleGroupsService.findAll(search);
   }
 
   @Get(':id')

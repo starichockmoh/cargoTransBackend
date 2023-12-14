@@ -7,10 +7,9 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
-import type { Request } from 'express';
 import { DriversDto } from 'src/dto';
 import { DriversService } from 'src/services';
 
@@ -25,9 +24,8 @@ export class DriversController {
   }
 
   @Get()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getAll(@Req() request: Request) {
-    return await this.driversService.findAll();
+  async getAll(@Query('search') search: string | undefined) {
+    return await this.driversService.findAll(search);
   }
 
   @Get(':id')
