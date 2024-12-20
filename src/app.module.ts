@@ -13,6 +13,7 @@ import {
 } from 'src/modules';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from 'src/config/config.service';
+import { CharactersModule } from 'src/modules/characters.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { configService } from 'src/config/config.service';
     DriversModule,
     PickUpPointsModule,
     RequestStatusesModule,
+    CharactersModule,
   ],
 })
 export class AppModule {}
